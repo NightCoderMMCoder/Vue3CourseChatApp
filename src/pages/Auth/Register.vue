@@ -5,6 +5,9 @@
         <h3>Register</h3>
       </div>
       <div class="card-body">
+        <div class="errors" v-if="errors.error">
+          {{ errors.error }}
+        </div>
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
             <label for="name">Name</label>
@@ -56,6 +59,7 @@
 <script>
 import { reactive, toRefs } from "vue";
 import useAalidation from "../../hooks/validation";
+import { firebaseAuth } from "../../firebase/init";
 
 export default {
   setup() {
@@ -67,10 +71,20 @@ export default {
 
     const { clearValidation, validation, errors } = useAalidation(user);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+      errors.error = "";
       const isValidate = validation();
       if (isValidate) {
-        console.log("validate");
+        try {
+          const res = await firebaseAuth.createUserWithEmailAndPassword(
+            user.email,
+            user.password
+          );
+          await res.user.updateProfile({ displayName: user.name });
+          console.log(res);
+        } catch (err) {
+          errors.error = err.message;
+        }
       }
     };
 
