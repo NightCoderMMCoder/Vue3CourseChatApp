@@ -1,8 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "../pages/Auth/Login.vue";
 import Register from "../pages/Auth/Register.vue";
+import ChatScreen from "../pages/Chat/ChatScreen.vue";
 
 const routes = [
+  {
+    path: "/",
+    name: "ChatScreen",
+    component: ChatScreen,
+  },
   {
     path: "/login",
     name: "Login",

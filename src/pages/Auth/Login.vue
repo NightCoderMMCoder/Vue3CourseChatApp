@@ -1,9 +1,119 @@
 <template>
-  <h1>Login</h1>
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <h3>Login</h3>
+      </div>
+      <div class="card-body">
+        <div class="errors" v-if="errors.error">
+          {{ errors.error }}
+        </div>
+        <form @submit.prevent="handleSubmit">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              v-model="email"
+              @blur="clearValidation('email')"
+            />
+            <small v-if="errors.email" class="error">
+              {{ errors.email }}
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              v-model="password"
+              @blur="clearValidation('password')"
+            />
+            <small v-if="errors.password" class="error">
+              {{ errors.password }}
+            </small>
+          </div>
+          <base-button :disabled="isLoading">
+            Login <BaseSpinner v-if="isLoading" />
+          </base-button>
+        </form>
+        <p>
+          Not a member?
+          <span @click="$router.push({ name: 'Register' })">Register Here</span>
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {};
+import { reactive, ref, toRefs } from "vue";
+import { useRouter } from "vue-router";
+import { firebaseAuth, db } from "../../firebase/init";
+import useAalidation from "../../hooks/validation";
+import BaseSpinner from "../../components/UI/BaseSpinner.vue";
+
+export default {
+  components: { BaseSpinner },
+  setup() {
+    const router = useRouter();
+    const user = reactive({
+      email: "",
+      password: "",
+    });
+    const isLoading = ref(false);
+
+    const { clearValidation, validation, errors } = useAalidation(user);
+
+    const handleSubmit = async () => {
+      errors.error = "";
+      const isValidate = validation();
+      if (isValidate) {
+        isLoading.value = true;
+        try {
+          const res = await firebaseAuth.signInWithEmailAndPassword(
+            user.email,
+            user.password
+          );
+          await db
+            .collection("users")
+            .doc(res.user.uid)
+            .update({
+              online: true,
+            });
+          router.push({ name: "ChatScreen" });
+        } catch (err) {
+          errors.error = err.message;
+        } finally {
+          isLoading.value = false;
+        }
+      }
+    };
+
+    return {
+      ...toRefs(user),
+      clearValidation,
+      validation,
+      errors,
+      handleSubmit,
+      isLoading,
+    };
+  },
+};
 </script>
 
-<style></style>
+<style scoped>
+p {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: rgb(221, 221, 221);
+}
+p span {
+  color: #fff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+</style>

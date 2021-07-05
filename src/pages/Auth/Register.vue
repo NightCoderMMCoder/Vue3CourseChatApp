@@ -52,7 +52,10 @@
             Register <BaseSpinner v-if="isLoading" />
           </base-button>
         </form>
-        <p>Have Already Account? <span>Login Here</span></p>
+        <p>
+          Have Already Account?
+          <span @click="$router.push({ name: 'Login' })">Login Here</span>
+        </p>
       </div>
     </div>
   </div>
@@ -98,7 +101,7 @@ export default {
               createdAt: new Date().toString(),
               online: true,
             });
-          // router.push({ name: "Home" });
+          router.push({ name: "ChatScreen" });
         } catch (err) {
           errors.error = err.message;
         } finally {
