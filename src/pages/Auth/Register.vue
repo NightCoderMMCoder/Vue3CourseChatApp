@@ -48,7 +48,9 @@
               {{ errors.password }}
             </small>
           </div>
-          <base-button>Register</base-button>
+          <base-button :disabled="isLoading">
+            Register <BaseSpinner v-if="isLoading" />
+          </base-button>
         </form>
         <p>Have Already Account? <span>Login Here</span></p>
       </div>
@@ -57,17 +59,22 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
+import { reactive, ref, toRefs } from "vue";
+import { useRouter } from "vue-router";
+import { firebaseAuth, db } from "../../firebase/init";
 import useAalidation from "../../hooks/validation";
-import { firebaseAuth } from "../../firebase/init";
+import BaseSpinner from "../../components/UI/BaseSpinner.vue";
 
 export default {
+  components: { BaseSpinner },
   setup() {
+    const router = useRouter();
     const user = reactive({
       name: "",
       email: "",
       password: "",
     });
+    const isLoading = ref(false);
 
     const { clearValidation, validation, errors } = useAalidation(user);
 
@@ -75,15 +82,27 @@ export default {
       errors.error = "";
       const isValidate = validation();
       if (isValidate) {
+        isLoading.value = true;
         try {
           const res = await firebaseAuth.createUserWithEmailAndPassword(
             user.email,
             user.password
           );
           await res.user.updateProfile({ displayName: user.name });
-          console.log(res);
+          await db
+            .collection("users")
+            .doc(res.user.uid)
+            .set({
+              name: user.name,
+              email: user.email,
+              createdAt: new Date().toString(),
+              online: true,
+            });
+          // router.push({ name: "Home" });
         } catch (err) {
           errors.error = err.message;
+        } finally {
+          isLoading.value = false;
         }
       }
     };
@@ -94,6 +113,7 @@ export default {
       validation,
       errors,
       handleSubmit,
+      isLoading,
     };
   },
 };
