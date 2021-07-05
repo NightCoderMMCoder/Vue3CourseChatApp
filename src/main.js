@@ -3,6 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import "./assets/main.css";
 
-createApp(App)
-  .use(router)
-  .mount("#app");
+import BaseButton from "./components/UI/BaseButton.vue";
+
+const app = createApp(App);
+
+app.component("BaseButton", BaseButton);
+
+app.use(router).mount("#app");
