@@ -1,12 +1,12 @@
 <template>
-  <div class="user-profile">
+  <div class="user-profile" v-if="user.name">
     <div class="user-info">
-      <div class="user-img" v-if="user.name">
+      <div class="user-img" v-if="user.name" :style="userImg">
         {{ user.name.charAt(0).toUpperCase() }}
       </div>
       <div>
         <h3 class="user-name">{{ user.name }}</h3>
-        <small class="status">Online</small>
+        <small class="status">{{ user.online ? "Online" : "Offline" }}</small>
       </div>
     </div>
     <slot></slot>
@@ -14,12 +14,8 @@
 </template>
 
 <script>
-import { inject } from "vue";
 export default {
-  setup() {
-    const user = inject("user");
-    return { user };
-  },
+  props: { userImg: Object, user: Object },
 };
 </script>
 

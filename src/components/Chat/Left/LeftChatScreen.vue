@@ -1,6 +1,6 @@
 <template>
   <div class="contact-card">
-    <ChatHeader>
+    <ChatHeader :user="user">
       <base-button @click="logout">Logout</base-button>
     </ChatHeader>
     <SearchUser v-model:search="search" />
@@ -66,7 +66,7 @@ export default {
       return usersWithoutAuthUser.value;
     });
 
-    return { logout, searchUsers, search };
+    return { logout, searchUsers, search, user };
   },
 };
 </script>

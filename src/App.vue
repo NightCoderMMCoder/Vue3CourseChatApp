@@ -13,6 +13,7 @@ export default {
         user.name = _user.displayName;
         user.email = _user.email;
         user.uid = _user.uid;
+        user.online = true;
       } else {
         user.name = "";
         user.email = "";
