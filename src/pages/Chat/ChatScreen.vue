@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LeftChatScreen from "../../components/Chat/LeftChatScreen.vue";
+import LeftChatScreen from "../../components/Chat/Left/LeftChatScreen.vue";
 export default {
   components: { LeftChatScreen },
 };

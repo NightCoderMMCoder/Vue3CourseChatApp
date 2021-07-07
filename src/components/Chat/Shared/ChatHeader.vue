@@ -1,7 +1,7 @@
 <template>
   <div class="user-profile">
     <div class="user-info">
-      <div class="user-img">
+      <div class="user-img" v-if="user.name">
         {{ user.name.charAt(0).toUpperCase() }}
       </div>
       <div>

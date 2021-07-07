@@ -62,15 +62,16 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs } from "vue";
+import { inject, reactive, ref, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import { firebaseAuth, db } from "../../firebase/init";
-import useAalidation from "../../hooks/validation";
+import useValidation from "../../hooks/validation";
 import BaseSpinner from "../../components/UI/BaseSpinner.vue";
 
 export default {
   components: { BaseSpinner },
   setup() {
+    const updateUser = inject("updateUser");
     const router = useRouter();
     const user = reactive({
       name: "",
@@ -79,7 +80,7 @@ export default {
     });
     const isLoading = ref(false);
 
-    const { clearValidation, validation, errors } = useAalidation(user);
+    const { clearValidation, validation, errors } = useValidation(user);
 
     const handleSubmit = async () => {
       errors.error = "";
@@ -92,6 +93,7 @@ export default {
             user.password
           );
           await res.user.updateProfile({ displayName: user.name });
+          updateUser(user.name);
           await db
             .collection("users")
             .doc(res.user.uid)
@@ -101,6 +103,7 @@ export default {
               createdAt: new Date().toString(),
               online: true,
             });
+
           router.push({ name: "ChatScreen" });
         } catch (err) {
           errors.error = err.message;

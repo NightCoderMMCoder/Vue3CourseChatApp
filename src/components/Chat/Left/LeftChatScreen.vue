@@ -3,16 +3,22 @@
     <ChatHeader>
       <base-button @click="logout">Logout</base-button>
     </ChatHeader>
+    <SearchUser />
+    <UsersList />
   </div>
 </template>
 
 <script>
 import { useRouter } from "vue-router";
-import { firebaseAuth } from "../../firebase/init";
-import ChatHeader from "./Shared/ChatHeader.vue";
+import { firebaseAuth } from "../../../firebase/init";
+import ChatHeader from "../Shared/ChatHeader.vue";
+import SearchUser from "./SearchUser.vue";
+import UsersList from "./UsersList.vue";
 export default {
   components: {
     ChatHeader,
+    SearchUser,
+    UsersList,
   },
   setup() {
     const router = useRouter();

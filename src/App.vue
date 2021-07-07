@@ -20,6 +20,11 @@ export default {
       }
     });
     provide("user", user);
+
+    const updateUser = (name) => {
+      user.name = name;
+    };
+    provide("updateUser", updateUser);
   },
 };
 </script>

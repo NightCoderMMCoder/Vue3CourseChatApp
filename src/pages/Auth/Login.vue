@@ -52,7 +52,7 @@
 import { reactive, ref, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import { firebaseAuth, db } from "../../firebase/init";
-import useAalidation from "../../hooks/validation";
+import useValidation from "../../hooks/validation";
 import BaseSpinner from "../../components/UI/BaseSpinner.vue";
 
 export default {
@@ -65,7 +65,7 @@ export default {
     });
     const isLoading = ref(false);
 
-    const { clearValidation, validation, errors } = useAalidation(user);
+    const { clearValidation, validation, errors } = useValidation(user);
 
     const handleSubmit = async () => {
       errors.error = "";
