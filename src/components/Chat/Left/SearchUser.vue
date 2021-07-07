@@ -1,11 +1,19 @@
 <template>
   <div class="search">
-    <input type="text" placeholder="Search..." />
+    <input
+      type="text"
+      placeholder="Search..."
+      :value="search"
+      @input="(e) => $emit('update:search', e.target.value)"
+    />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: { search: String },
+  emits: ["update:search"],
+};
 </script>
 
 <style scoped>

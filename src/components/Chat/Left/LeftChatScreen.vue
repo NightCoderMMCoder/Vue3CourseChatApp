@@ -3,13 +3,13 @@
     <ChatHeader>
       <base-button @click="logout">Logout</base-button>
     </ChatHeader>
-    <SearchUser />
-    <UsersList :users="usersWithoutAuthUser" />
+    <SearchUser v-model:search="search" />
+    <UsersList :users="searchUsers" />
   </div>
 </template>
 
 <script>
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { firebaseAuth, db } from "../../../firebase/init";
 import ChatHeader from "../Shared/ChatHeader.vue";
@@ -47,7 +47,26 @@ export default {
       users.value.filter((u) => u.id !== user.uid)
     );
 
-    return { logout, usersWithoutAuthUser };
+    const search = ref("");
+    const activeSearch = ref("");
+    watch(search, (val) => {
+      setTimeout(() => {
+        if (val === search.value) {
+          activeSearch.value = val;
+        }
+      }, 300);
+    });
+
+    const searchUsers = computed(() => {
+      if (activeSearch.value) {
+        return users.value.filter((u) =>
+          u.name.toUpperCase().includes(search.value.toUpperCase())
+        );
+      }
+      return usersWithoutAuthUser.value;
+    });
+
+    return { logout, searchUsers, search };
   },
 };
 </script>
