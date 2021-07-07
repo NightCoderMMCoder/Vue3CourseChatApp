@@ -18,6 +18,7 @@ export default {
         user.name = "";
         user.email = "";
         user.uid = "";
+        user.online = false;
       }
     });
     provide("user", user);

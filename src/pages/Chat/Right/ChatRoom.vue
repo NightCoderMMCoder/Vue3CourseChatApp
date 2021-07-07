@@ -1,14 +1,17 @@
 <template>
   <ChatHeader :user="user" />
+  <MessageBox />
 </template>
 
 <script>
 import { reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ChatHeader from "../../../components/Chat/Shared/ChatHeader.vue";
+import MessageBox from "../../../components/Chat/Right/MessageBox.vue";
 import { db } from "../../../firebase/init";
+
 export default {
-  components: { ChatHeader },
+  components: { ChatHeader, MessageBox },
   async setup() {
     const route = useRoute();
     const router = useRouter();
