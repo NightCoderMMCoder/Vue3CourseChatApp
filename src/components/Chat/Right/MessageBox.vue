@@ -20,7 +20,6 @@ export default {
     const text = ref("");
     const sendMessage = async () => {
       if (!text.value) return;
-      console.log("run");
       const newMessage = {
         text: text.value,
         createdAt: new Date().toString(),
@@ -31,6 +30,7 @@ export default {
         .doc(`${user.uid}+${otherUid}`)
         .collection("messages")
         .add(newMessage);
+      text.value = "";
 
       delete newMessage.uid;
 
@@ -38,7 +38,6 @@ export default {
         .doc(`${otherUid}+${user.uid}`)
         .collection("messages")
         .add(newMessage);
-      text.value = "";
     };
     return { text, sendMessage };
   },

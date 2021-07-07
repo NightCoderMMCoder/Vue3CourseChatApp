@@ -1,20 +1,24 @@
 <template>
   <ChatHeader :user="user" />
+  <MessagesList :messages="messages" />
   <MessageBox />
 </template>
 
 <script>
-import { reactive } from "vue";
+import { inject, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ChatHeader from "../../../components/Chat/Shared/ChatHeader.vue";
 import MessageBox from "../../../components/Chat/Right/MessageBox.vue";
+import MessagesList from "../../../components/Chat/Right/MessagesList.vue";
 import { db } from "../../../firebase/init";
 
 export default {
-  components: { ChatHeader, MessageBox },
+  components: { ChatHeader, MessageBox, MessagesList },
   async setup() {
     const route = useRoute();
     const router = useRouter();
+
+    const authUser = inject("user");
 
     const user = reactive({});
 
@@ -29,7 +33,21 @@ export default {
       user.online = doc.data().online;
       user.id = doc.id;
     }
-    return { user };
+
+    const messages = ref([]);
+    const chatsRef = db
+      .collection("chats")
+      .doc(`${authUser.uid}+${userId}`)
+      .collection("messages")
+      .orderBy("createdAt");
+    chatsRef.onSnapshot((snapshot) => {
+      messages.value = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+    });
+
+    return { user, messages };
   },
 };
 </script>
