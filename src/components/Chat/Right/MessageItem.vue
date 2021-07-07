@@ -1,16 +1,28 @@
 <template>
   <div class="message-container" :class="{ sender: message.uid }">
-    <div class="user-img">A</div>
+    <div class="user-img">
+      {{
+        message.uid
+          ? authUser.name.charAt(0).toUpperCase()
+          : user.name.charAt(0).toUpperCase()
+      }}
+    </div>
     <div class="message-text">
       <h3>{{ message.text }}</h3>
-      <small>Time</small>
+      <small>{{ message.createdAt }}</small>
     </div>
   </div>
 </template>
 
 <script>
+import { inject } from "vue";
 export default {
-  props: { message: Object },
+  props: { message: Object, user: Object },
+  setup() {
+    const authUser = inject("user");
+
+    return { authUser };
+  },
 };
 </script>
 

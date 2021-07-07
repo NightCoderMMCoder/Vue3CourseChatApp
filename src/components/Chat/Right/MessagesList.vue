@@ -4,6 +4,7 @@
       v-for="message in messages"
       :key="message.id"
       :message="message"
+      :user="user"
     />
   </div>
 </template>
@@ -13,7 +14,7 @@ import { nextTick, ref, watch } from "vue";
 import MessageItem from "./MessageItem.vue";
 export default {
   components: { MessageItem },
-  props: { messages: Array },
+  props: { messages: Array, user: Object },
   setup(props) {
     const chatsList = ref(null);
 

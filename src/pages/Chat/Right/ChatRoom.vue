@@ -1,6 +1,6 @@
 <template>
   <ChatHeader :user="user" />
-  <MessagesList :messages="messages" />
+  <MessagesList :messages="messages" :user="user" />
   <MessageBox />
 </template>
 
@@ -11,6 +11,7 @@ import ChatHeader from "../../../components/Chat/Shared/ChatHeader.vue";
 import MessageBox from "../../../components/Chat/Right/MessageBox.vue";
 import MessagesList from "../../../components/Chat/Right/MessagesList.vue";
 import { db } from "../../../firebase/init";
+import moment from "moment";
 
 export default {
   components: { ChatHeader, MessageBox, MessagesList },
@@ -44,6 +45,7 @@ export default {
       messages.value = snapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
+        createdAt: moment(new Date(doc.data().createdAt)).format("MM/DD/YYYY"),
       }));
     });
 
