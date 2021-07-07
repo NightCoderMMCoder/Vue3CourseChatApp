@@ -1,9 +1,18 @@
 <template>
-  <h1>Chat Screen</h1>
+  <div class="chat-screen">
+    <LeftChatScreen />
+  </div>
 </template>
 
 <script>
-export default {};
+import LeftChatScreen from "../../components/Chat/LeftChatScreen.vue";
+export default {
+  components: { LeftChatScreen },
+};
 </script>
 
-<style></style>
+<style scoped>
+.chat-screen {
+  display: flex;
+}
+</style>
