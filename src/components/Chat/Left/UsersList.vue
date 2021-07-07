@@ -1,10 +1,6 @@
 <template>
   <div class="contact-list">
-    <UserItem />
-    <UserItem />
-    <UserItem />
-    <UserItem />
-    <UserItem />
+    <UserItem v-for="user in users" :key="user.id" :user="user" />
   </div>
 </template>
 
@@ -12,6 +8,7 @@
 import UserItem from "./UserItem.vue";
 export default {
   components: { UserItem },
+  props: { users: Array },
 };
 </script>
 
