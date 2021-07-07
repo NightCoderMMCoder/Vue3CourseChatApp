@@ -83,7 +83,7 @@ export default {
             .update({
               online: true,
             });
-          router.push({ name: "ChatScreen" });
+          router.push({ name: "WelcomeChat" });
         } catch (err) {
           errors.error = err.message;
         } finally {

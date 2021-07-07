@@ -4,9 +4,14 @@ import router from "./router";
 import "./assets/main.css";
 
 import BaseButton from "./components/UI/BaseButton.vue";
+import { firebaseAuth } from "./firebase/init";
+let app;
+firebaseAuth.onAuthStateChanged(() => {
+  if (!app) {
+    app = createApp(App);
 
-const app = createApp(App);
+    app.component("BaseButton", BaseButton);
 
-app.component("BaseButton", BaseButton);
-
-app.use(router).mount("#app");
+    app.use(router).mount("#app");
+  }
+});

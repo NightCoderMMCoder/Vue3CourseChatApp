@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { computed, inject, ref, watch } from "vue";
+import { computed, inject, ref, watch, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { firebaseAuth, db } from "../../../firebase/init";
 import ChatHeader from "../Shared/ChatHeader.vue";
@@ -38,9 +38,18 @@ export default {
     const users = ref([]);
 
     const collectionRef = db.collection("users").orderBy("createdAt", "desc");
-    collectionRef.onSnapshot((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      users.value = data;
+    watchEffect((onInValidate) => {
+      const unsub = collectionRef.onSnapshot((snapshot) => {
+        console.log("snapshot");
+        const data = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        users.value = data;
+      });
+      onInValidate(() => {
+        unsub();
+      });
     });
 
     const usersWithoutAuthUser = computed(() =>

@@ -1,13 +1,19 @@
 <template>
   <div class="welcome-chat">
-    <div class="user-img">A</div>
-    <h3>Hi, Aung Myat OO</h3>
+    <div class="user-img">{{ user.name.charAt(0).toUpperCase() }}</div>
+    <h3>Hi, {{ user.name }}</h3>
     <p>Please select a chat to start messaging.</p>
   </div>
 </template>
 
 <script>
-export default {};
+import { inject } from "vue";
+export default {
+  setup() {
+    const user = inject("user");
+    return { user };
+  },
+};
 </script>
 
 <style scoped>
