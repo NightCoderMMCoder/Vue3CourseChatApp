@@ -1,5 +1,7 @@
 <template>
-  <ChatHeader :user-img="userImg" :user="user" />
+  <router-link :to="{ name: 'ChatRoom', params: { userId: user.id } }">
+    <ChatHeader :user-img="userImg" :user="user" />
+  </router-link>
 </template>
 
 <script>
@@ -22,6 +24,7 @@ export default {
 <style scoped>
 .user-profile {
   background: none;
+  color: white;
 }
 .router-link-exact-active .user-profile {
   background: #66666646;
